@@ -1,12 +1,7 @@
-const {
-	app,
-	BrowserWindow,
-	screen,
-	desktopCapturer,
-	ipcMain,
-} = require('electron');
+const { app, BrowserWindow, desktopCapturer, ipcMain } = require('electron');
 const path = require('path');
 require('electron-reload')(__dirname);
+const getSources = require('./utils/getSources');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -26,18 +21,10 @@ const createWindow = () => {
 	mainWindow.webContents.openDevTools();
 };
 
-const getMainSource = async () => {
-	const sources = await desktopCapturer.getSources({
-		types: ['window', 'screen'],
-	});
-
-	return sources[0];
-};
-
 app.whenReady().then(() => {
 	createWindow();
 
-	ipcMain.handle('source:getMain', getMainSource);
+	ipcMain.handle('source:getAll', getSources);
 
 	app.on('activate', () => {
 		if (BrowserWindow.getAllWindows().length === 0) {

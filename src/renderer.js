@@ -1,14 +1,30 @@
 window.document.addEventListener('DOMContentLoaded', () => {
 	const video = document.querySelector('video');
+	const sourcesBlock = document.querySelector('.sources');
 
-	const initStream = async () => {
-		const { id: sourceId } = await captureSource.getMainSource();
+	const renderSources = async () => {
+		const sources = await captureSources.getAllSource();
+
+		sources.forEach((s) => {
+			const li = document.createElement('li');
+			li.className = 'source-item';
+			li.textContent = s.name;
+			li.addEventListener('click', () => {
+				startStream(s.id);
+			});
+			sourcesBlock.appendChild(li);
+		});
+	};
+
+	renderSources();
+
+	const startStream = async (id = 'screen:0:0') => {
 		const stream = await navigator.mediaDevices.getUserMedia({
 			audio: false,
 			video: {
 				mandatory: {
 					chromeMediaSource: 'desktop',
-					chromeMediaSourceId: sourceId,
+					chromeMediaSourceId: id,
 					minWidth: 1280,
 					maxWidth: 1280,
 					minHeight: 720,
@@ -21,5 +37,5 @@ window.document.addEventListener('DOMContentLoaded', () => {
 		video.onloadedmetadata = (e) => video.play();
 	};
 
-	initStream();
+	startStream();
 });
