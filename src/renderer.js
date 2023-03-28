@@ -1,10 +1,11 @@
 window.document.addEventListener('DOMContentLoaded', () => {
 	const video = document.querySelector('video');
-	const sourcesBlock = document.querySelector('.sources');
+	const sourcesBlock = document.querySelector('.sources-list');
+	const sourcesBtn = document.querySelector('.sources-btn');
 
-	sourcesBlock.addEventListener('click', () => {
-		sourcesBlock.classList.toggle('open')
-	})
+	sourcesBtn.addEventListener('click', () => {
+		sourcesBtn.classList.toggle('open');
+	});
 
 	const renderSources = async () => {
 		const sources = await captureSources.getAllSource();
