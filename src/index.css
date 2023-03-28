@@ -7,6 +7,7 @@
 body {
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
 		Arial, sans-serif;
+	overflow: hidden;
 }
 
 main {
@@ -25,13 +26,8 @@ video {
 	height: 225px;
 }
 
-.sources-list {
-	width: 100%;
-	list-style: none;
-	display: none;
-}
-
 .sources-btn {
+	margin-bottom: 8px;
 	padding: 4px 8px;
 	width: 100%;
 	height: 21px;
@@ -44,8 +40,15 @@ video {
 	cursor: pointer;
 }
 
-.sources-btn.open + .sources-list{
-	display: block;
+.sources-list {
+	width: 100%;
+	list-style: none;
+	transform: translateX(110%);
+	transition: all 0.5s ease-in;
+}
+
+.sources-list.open {
+	transform: translateX(0%);
 }
 
 .source-item {
@@ -61,5 +64,5 @@ video {
 }
 
 .source-item:hover {
-	color: #3b82f6;
+	color: #fb923c;
 }

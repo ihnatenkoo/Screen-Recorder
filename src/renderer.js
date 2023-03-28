@@ -4,24 +4,26 @@ window.document.addEventListener('DOMContentLoaded', () => {
 	const sourcesBtn = document.querySelector('.sources-btn');
 
 	sourcesBtn.addEventListener('click', () => {
-		sourcesBtn.classList.toggle('open');
+		sourcesBlock.classList.add('open');
+		sourcesBlock.innerHTML = '';
+		sourcesBtn.innerHTML = 'Refresh sources';
+		sourcesBtn.style.backgroundColor = '#fb923c';
+		renderSources();
 	});
 
 	const renderSources = async () => {
 		const sources = await captureSources.getAllSource();
 
-		sources.forEach((s,i) => {
+		sources.forEach((s, i) => {
 			const li = document.createElement('li');
 			li.className = 'source-item';
-			li.textContent = `${i+1}. ${s.name}`;
+			li.textContent = `${i + 1}. ${s.name}`;
 			li.addEventListener('click', () => {
 				startStream(s.id);
 			});
 			sourcesBlock.appendChild(li);
 		});
 	};
-
-	renderSources();
 
 	const startStream = async (id = 'screen:0:0') => {
 		const stream = await navigator.mediaDevices.getUserMedia({
