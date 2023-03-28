@@ -3,6 +3,8 @@ window.document.addEventListener('DOMContentLoaded', () => {
 	const sourcesBlock = document.querySelector('.sources-list');
 	const sourcesBtn = document.querySelector('.sources-btn');
 
+	let activeStreamId;
+
 	sourcesBtn.addEventListener('click', () => {
 		sourcesBlock.classList.add('open');
 		sourcesBlock.innerHTML = '';
@@ -11,21 +13,36 @@ window.document.addEventListener('DOMContentLoaded', () => {
 		renderSources();
 	});
 
+	const onStreamChange = (streamId, listItem) => {
+		startStream(streamId);
+		document.querySelectorAll('.source-item').forEach((item) => {
+			item.classList.remove('active');
+			if (item.dataset.id === activeStreamId) {
+				listItem.classList.add('active');
+			}
+		});
+	};
+
 	const renderSources = async () => {
 		const sources = await captureSources.getAllSource();
 
-		sources.forEach((s, i) => {
+		sources.forEach((source, i) => {
 			const li = document.createElement('li');
-			li.className = 'source-item';
-			li.textContent = `${i + 1}. ${s.name}`;
-			li.addEventListener('click', () => {
-				startStream(s.id);
-			});
+			
+			li.textContent = `${i + 1}. ${source.name}`;
+			li.dataset.id = source.id;
+			li.className =
+				li.dataset.id === activeStreamId ? 'source-item active' : 'source-item';
+
+			li.addEventListener('click', () => onStreamChange(source.id, li));
+
 			sourcesBlock.appendChild(li);
 		});
 	};
 
 	const startStream = async (id = 'screen:0:0') => {
+		activeStreamId = id;
+
 		const stream = await navigator.mediaDevices.getUserMedia({
 			audio: false,
 			video: {
@@ -45,4 +62,5 @@ window.document.addEventListener('DOMContentLoaded', () => {
 	};
 
 	startStream();
+	renderSources();
 });

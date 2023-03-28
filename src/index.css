@@ -63,6 +63,6 @@ video {
 	transition: all 0.15s linear;
 }
 
-.source-item:hover {
+.source-item:hover, .source-item.active {
 	color: #fb923c;
 }
