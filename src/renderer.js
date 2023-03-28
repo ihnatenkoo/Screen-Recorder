@@ -2,13 +2,17 @@ window.document.addEventListener('DOMContentLoaded', () => {
 	const video = document.querySelector('video');
 	const sourcesBlock = document.querySelector('.sources');
 
+	sourcesBlock.addEventListener('click', () => {
+		sourcesBlock.classList.toggle('open')
+	})
+
 	const renderSources = async () => {
 		const sources = await captureSources.getAllSource();
 
-		sources.forEach((s) => {
+		sources.forEach((s,i) => {
 			const li = document.createElement('li');
 			li.className = 'source-item';
-			li.textContent = s.name;
+			li.textContent = `${i+1}. ${s.name}`;
 			li.addEventListener('click', () => {
 				startStream(s.id);
 			});
