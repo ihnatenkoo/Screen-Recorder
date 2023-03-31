@@ -1,4 +1,4 @@
-const { app, BrowserWindow, desktopCapturer, ipcMain } = require('electron');
+const { app, BrowserWindow, screen, ipcMain } = require('electron');
 const path = require('path');
 require('electron-reload')(__dirname);
 const getSources = require('./utils/getSources');
@@ -10,8 +10,9 @@ if (require('electron-squirrel-startup')) {
 
 const createWindow = () => {
 	const mainWindow = new BrowserWindow({
-		width: 700,
+		width: 690,
 		height: 500,
+		resizable: false,
 		webPreferences: {
 			preload: path.join(__dirname, 'preload.js'),
 		},
@@ -25,6 +26,7 @@ app.whenReady().then(() => {
 	createWindow();
 
 	ipcMain.handle('source:getAll', getSources);
+	ipcMain.handle('getPrimaryDisplay', () => screen.getPrimaryDisplay());
 
 	app.on('activate', () => {
 		if (BrowserWindow.getAllWindows().length === 0) {

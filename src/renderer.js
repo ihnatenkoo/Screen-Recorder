@@ -28,7 +28,7 @@ window.document.addEventListener('DOMContentLoaded', () => {
 
 		sources.forEach((source, i) => {
 			const li = document.createElement('li');
-			
+
 			li.textContent = `${i + 1}. ${source.name}`;
 			li.dataset.id = source.id;
 			li.className =
@@ -40,15 +40,25 @@ window.document.addEventListener('DOMContentLoaded', () => {
 		});
 	};
 
-	const startStream = async (id = 'screen:0:0') => {
-		activeStreamId = id;
+	const startStream = async (sourceId) => {
+		if (!sourceId) {
+			const { id: primaryDisplayId } = await captureSources.getPrimaryDisplay();
+			const sources = await captureSources.getAllSource();
+			const primarySource = sources.find(
+				({ display_id }) => display_id == primaryDisplayId
+			);
+
+			activeStreamId = primarySource.id;
+		} else {
+			activeStreamId = sourceId;
+		}
 
 		const stream = await navigator.mediaDevices.getUserMedia({
 			audio: false,
 			video: {
 				mandatory: {
 					chromeMediaSource: 'desktop',
-					chromeMediaSourceId: id,
+					chromeMediaSourceId: activeStreamId,
 					minWidth: 1280,
 					maxWidth: 1280,
 					minHeight: 720,
